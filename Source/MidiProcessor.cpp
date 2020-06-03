@@ -7,6 +7,8 @@ MidiProcessor::MidiProcessor(AudioProcessorValueTreeState& vts)
 {
     is_on_ = apvts_.getRawParameterValue(kIdIsProcessingActive);
     cur_key_ = apvts_.getRawParameterValue(kIdKey);
+    min_nn_ = apvts_.getRawParameterValue(kIdMinMidiNoteNumber);
+    max_nn_ = apvts_.getRawParameterValue(kIdMaxMidiNoteNumber);
 
     apvts_.addParameterListener(kIdIsProcessingActive, this);
     apvts_.addParameterListener(kIdKey, this);
@@ -36,13 +38,15 @@ void MidiProcessor::processMidiMsgsBlock(MidiBuffer& midi_messages)
                     << cur_msg.getChannel() << " sample_pos: " << sample_pos);
                 state_changed_ = false;
             }
-            if (*is_on_ > 0.0f)
+            auto space = *max_nn_ - *min_nn_;
+            if (*is_on_ && *cur_key_ < kOctaveSpan && space > kOctaveSpan)
             {
-                auto orig_nn = cur_msg.getNoteNumber();
-                auto new_nn = getNegHarmNn(orig_nn, (int) *cur_key_);
+                auto note_number = cur_msg.getNoteNumber();
+
+                auto new_nn = getNegHarmNn(note_number, (int) *cur_key_);
                 DBG("Transformed ["
-                    << orig_nn << "] "
-                    << MidiMessage::getMidiNoteName(orig_nn, true, true, 4)
+                    << note_number << "] "
+                    << MidiMessage::getMidiNoteName(note_number, true, true, 4)
                     << " to [" << new_nn << "] "
                     << MidiMessage::getMidiNoteName(new_nn, true, true, 4));
                 cur_msg.setNoteNumber(new_nn);
@@ -60,7 +64,7 @@ void MidiProcessor::parameterChanged(const String& parameter_id, float new_value
     state_changed_ = true;
 }
 
-int MidiProcessor::getNegHarmNn(int nn, int key)
+int MidiProcessor::getNegHarmNn(uint8 nn, uint8 key)
 {
     DBG("getNegHarmNn called, nn: "
         << nn << " key: " << key
@@ -71,5 +75,14 @@ int MidiProcessor::getNegHarmNn(int nn, int key)
     auto relPosNnToMirror = nn - mirrorPos;
     auto negHarmRelPos = relPosNnToMirror * (-1);
     auto negHarmPos = negHarmRelPos + mirrorPos;
+
+    while (*min_nn_ > negHarmPos)
+    {
+        negHarmPos + kOctaveSpan;
+    }
+    while (*max_nn_ < negHarmPos)
+    {
+        negHarmPos - kOctaveSpan;
+    }
     return negHarmPos;
 }

@@ -3,6 +3,8 @@
 #include <JuceHeader.h>
 #include "MidiProcessor.h"
 
+constexpr auto kOctaveSpan = 12;
+
 const StringArray kKeySignatures {
     "C",
     "Db",

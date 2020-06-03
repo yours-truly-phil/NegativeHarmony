@@ -24,8 +24,6 @@
 
 #include <JuceHeader.h>
 
-constexpr auto kOctaveSpan = 12;
-
 class MidiProcessor final : AudioProcessorValueTreeState::Listener
 {
 public:
@@ -34,7 +32,7 @@ public:
 
     void processMidiMsgsBlock(MidiBuffer& midi_messages);
 
-    int getNegHarmNn(int nn, int key);
+    int getNegHarmNn(uint8 nn, uint8 key);
 
 private:
     void parameterChanged(const String& parameter_id, float new_value) override;
@@ -45,6 +43,8 @@ private:
 
     std::atomic<float>* is_on_;
     std::atomic<float>* cur_key_;
+    std::atomic<float>* min_nn_;
+    std::atomic<float>* max_nn_;
 
     bool state_changed_;
 };
