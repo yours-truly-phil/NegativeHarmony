@@ -3,7 +3,7 @@
 #include <JuceHeader.h>
 #include "MidiProcessor.h"
 
-constexpr auto kOctaveSpan = 12;
+constexpr std::atomic_uint8_t kOctaveSpan {12};
 
 const StringArray kKeySignatures {
     "C",
@@ -11,7 +11,7 @@ const StringArray kKeySignatures {
     "D",
     "Eb",
     "E",
-    "F"
+    "F",
     "F# & Gb",
     "G",
     "Ab",
@@ -20,11 +20,11 @@ const StringArray kKeySignatures {
     "B",
 };
 
-constexpr auto kIdKey = "id_key";
-constexpr auto kIdIsProcessingActive = "id_is_processing_active";
+const String kIdKey { "id_key" };
+const String kIdIsProcessingActive = "id_is_processing_active";
 
-constexpr auto kIdMinMidiNoteNumber = "id_min_midi_note_number";
-constexpr auto kIdMaxMidiNoteNumber = "id_max_midi_note_number";
+const String kIdMinMidiNoteNumber = "id_min_midi_note_number";
+const String kIdMaxMidiNoteNumber = "id_max_midi_note_number";
 
 class NegativeHarmonyProcessor : public AudioProcessor
 {

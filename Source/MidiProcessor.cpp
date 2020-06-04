@@ -43,7 +43,7 @@ void MidiProcessor::processMidiMsgsBlock(MidiBuffer& midi_messages)
             {
                 auto note_number = cur_msg.getNoteNumber();
 
-                auto new_nn = getNegHarmNn(note_number, (int) *cur_key_);
+                auto new_nn = getNegHarmNn(note_number, *cur_key_);
                 DBG("Transformed ["
                     << note_number << "] "
                     << MidiMessage::getMidiNoteName(note_number, true, true, 4)
@@ -64,17 +64,14 @@ void MidiProcessor::parameterChanged(const String& parameter_id, float new_value
     state_changed_ = true;
 }
 
-int MidiProcessor::getNegHarmNn(uint8 nn, uint8 key)
+int MidiProcessor::getNegHarmNn(int nn, int inKeyOf)
 {
     DBG("getNegHarmNn called, nn: "
-        << nn << " key: " << key
+        << nn << " inKeyOf: " << inKeyOf
         << " NoteName: " << MidiMessage::getMidiNoteName(nn, false, true, 4));
 
-    auto mirrorOctave = floor((nn + 2 - key) / kOctaveSpan);
-    auto mirrorPos = mirrorOctave * kOctaveSpan + 3.5 + key;
-    auto relPosNnToMirror = nn - mirrorPos;
-    auto negHarmRelPos = relPosNnToMirror * (-1);
-    auto negHarmPos = negHarmRelPos + mirrorPos;
+    auto mirrorNn = negHarmMirAxisNn(nn, inKeyOf);
+    auto negHarmPos =  2 * mirrorNn - nn;
 
     while (*min_nn_ > negHarmPos)
     {
@@ -85,4 +82,11 @@ int MidiProcessor::getNegHarmNn(uint8 nn, uint8 key)
         negHarmPos -= kOctaveSpan;
     }
     return negHarmPos;
+}
+
+float MidiProcessor::negHarmMirAxisNn(int nn, int inKeyOf)
+{
+    auto mirrorNo = std::floor((nn + 2 - inKeyOf) / kOctaveSpan);
+    auto mirrorNn = mirrorNo * kOctaveSpan + 3.5 + inKeyOf;
+    return mirrorNn;
 }

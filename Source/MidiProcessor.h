@@ -32,7 +32,9 @@ public:
 
     void processMidiMsgsBlock(MidiBuffer& midi_messages);
 
-    int getNegHarmNn(uint8 nn, uint8 key);
+    int getNegHarmNn(int nn, int inKeyOf);
+
+    float negHarmMirAxisNn(int nn, int inKeyOf);
 
 private:
     void parameterChanged(const String& parameter_id, float new_value) override;
@@ -47,4 +49,5 @@ private:
     std::atomic<float>* max_nn_;
 
     bool state_changed_;
+    void negHarmMirAxisNn(uint8 nn, uint8 inKeyOf) const;
 };
