@@ -78,11 +78,11 @@ int MidiProcessor::getNegHarmNn(uint8 nn, uint8 key)
 
     while (*min_nn_ > negHarmPos)
     {
-        negHarmPos + kOctaveSpan;
+        negHarmPos += kOctaveSpan;
     }
     while (*max_nn_ < negHarmPos)
     {
-        negHarmPos - kOctaveSpan;
+        negHarmPos -= kOctaveSpan;
     }
     return negHarmPos;
 }
