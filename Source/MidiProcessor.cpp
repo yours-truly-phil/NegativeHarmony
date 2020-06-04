@@ -34,8 +34,9 @@ void MidiProcessor::processMidiMsgsBlock(MidiBuffer& midi_messages)
                     meta.samplePosition);
                 state_changed_ = false;
             }
-            auto space = *max_nn_ - *min_nn_;
-            if (*is_on_ && *cur_key_ < kOctaveSpan && space > kOctaveSpan)
+
+            if (checkNegHarmPrerequisites(
+                    max_nn_, min_nn_, cur_key_, kOctaveSpan, is_on_))
             {
                 auto note_number = cur_msg.getNoteNumber();
 
@@ -47,6 +48,16 @@ void MidiProcessor::processMidiMsgsBlock(MidiBuffer& midi_messages)
     }
 
     midi_messages.swapWith(p_midi_buffer_);
+}
+
+bool MidiProcessor::checkNegHarmPrerequisites(std::atomic<float>* max_note_number,
+                                              std::atomic<float>* min_note_number,
+                                              std::atomic<float>* key,
+                                              std::float_t octave_span,
+                                              std::atomic<float>* is_on)
+{
+    auto available_space = *max_note_number - *min_note_number;
+    return *is_on && *key < octave_span && available_space > octave_span;
 }
 
 void MidiProcessor::parameterChanged(const String& parameter_id, float new_value)
