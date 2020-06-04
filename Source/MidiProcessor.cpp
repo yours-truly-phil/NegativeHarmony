@@ -22,20 +22,16 @@ void MidiProcessor::processMidiMsgsBlock(MidiBuffer& midi_messages)
 {
     p_midi_buffer_.clear();
 
-    MidiBuffer::Iterator it(midi_messages);
-    MidiMessage cur_msg;
-    int sample_pos;
-
-    while (it.getNextEvent(cur_msg, sample_pos))
+    for (auto meta: midi_messages)
     {
+        auto cur_msg = meta.getMessage();
         if (cur_msg.isNoteOnOrOff())
         {
             if (state_changed_)
             {
                 p_midi_buffer_.addEvent(
-                    MidiMessage::allNotesOff(cur_msg.getChannel()), sample_pos);
-                DBG("AllNotesOff Event added to buffer because of change. Channel: "
-                    << cur_msg.getChannel() << " sample_pos: " << sample_pos);
+                    MidiMessage::allNotesOff(cur_msg.getChannel()),
+                    meta.samplePosition);
                 state_changed_ = false;
             }
             auto space = *max_nn_ - *min_nn_;
@@ -44,16 +40,12 @@ void MidiProcessor::processMidiMsgsBlock(MidiBuffer& midi_messages)
                 auto note_number = cur_msg.getNoteNumber();
 
                 auto new_nn = getNegHarmNn(note_number, *cur_key_);
-                DBG("Transformed ["
-                    << note_number << "] "
-                    << MidiMessage::getMidiNoteName(note_number, true, true, 4)
-                    << " to [" << new_nn << "] "
-                    << MidiMessage::getMidiNoteName(new_nn, true, true, 4));
+
                 cur_msg.setNoteNumber(new_nn);
             }
         }
-        p_midi_buffer_.addEvent(cur_msg, sample_pos);
     }
+
     midi_messages.swapWith(p_midi_buffer_);
 }
 
@@ -71,7 +63,7 @@ int MidiProcessor::getNegHarmNn(int nn, int inKeyOf)
         << " NoteName: " << MidiMessage::getMidiNoteName(nn, false, true, 4));
 
     auto mirrorNn = negHarmMirAxisNn(nn, inKeyOf);
-    auto negHarmPos =  2 * mirrorNn - nn;
+    auto negHarmPos = 2 * mirrorNn - nn;
 
     while (*min_nn_ > negHarmPos)
     {

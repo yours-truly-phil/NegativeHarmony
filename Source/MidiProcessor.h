@@ -49,5 +49,4 @@ private:
     std::atomic<float>* max_nn_;
 
     bool state_changed_;
-    void negHarmMirAxisNn(uint8 nn, uint8 inKeyOf) const;
 };

@@ -3,7 +3,7 @@
 #include <JuceHeader.h>
 #include "MidiProcessor.h"
 
-constexpr std::atomic_uint8_t kOctaveSpan {12};
+constexpr std::float_t kOctaveSpan {12.0f};
 
 const StringArray kKeySignatures {
     "C",
@@ -20,7 +20,7 @@ const StringArray kKeySignatures {
     "B",
 };
 
-const String kIdKey { "id_key" };
+const String kIdKey {"id_key"};
 const String kIdIsProcessingActive = "id_is_processing_active";
 
 const String kIdMinMidiNoteNumber = "id_min_midi_note_number";
