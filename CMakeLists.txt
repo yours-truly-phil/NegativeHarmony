@@ -2,17 +2,17 @@ cmake_minimum_required(VERSION 3.16)
 
 project(NegativeHarmony VERSION 0.0.1)
 
-set (BaseTargetName NegativeHarmony)
-set (TestTargetName NegativeHarmony_tests)
+set(BaseTargetName NegativeHarmony)
+set(TestTargetName NegativeHarmony_tests)
 
 set(CMAKE_CXX_STANDARD 17)
 
 #Post build is temporarily broken on Linux
 if (CMAKE_SYSTEM_NAME STREQUAL "Linux")
     set(postBuild FALSE)
-else()
+else ()
     set(postBuild TRUE)
-endif()
+endif ()
 
 juce_add_plugin("${BaseTargetName}"
         # VERSION ...                               # Set this if the plugin version is different to the project version
@@ -54,6 +54,9 @@ target_link_libraries(${BaseTargetName} PRIVATE
 # Now simply link against gtest or gtest_main as needed. Eg
 add_executable(${TestTargetName} Test/NegativeHarmonyTest.cpp)
 
-target_link_libraries(${TestTargetName} ${BaseTargetName})
-target_link_libraries(${TestTargetName} gtest gtest_main)
+target_link_libraries(${TestTargetName} PRIVATE
+        ${BaseTargetName})
+target_link_libraries(${TestTargetName} PRIVATE
+        gtest
+        gtest_main)
 add_test(NAME ${BaseTargetName}_test COMMAND ${TestTargetName})

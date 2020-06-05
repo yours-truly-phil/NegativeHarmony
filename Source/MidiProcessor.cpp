@@ -1,8 +1,8 @@
 #include "MidiProcessor.h"
 
-#include "PluginProcessor.h"
+//#include "PluginProcessor.h"
 
-MidiProcessor::MidiProcessor(AudioProcessorValueTreeState& vts)
+MidiProcessor::MidiProcessor(juce::AudioProcessorValueTreeState& vts)
     : apvts_(vts)
 {
     is_on_ = apvts_.getRawParameterValue(kIdIsProcessingActive);
@@ -18,7 +18,7 @@ MidiProcessor::MidiProcessor(AudioProcessorValueTreeState& vts)
 
 MidiProcessor::~MidiProcessor() = default;
 
-void MidiProcessor::processMidiMsgsBlock(MidiBuffer& midi_messages)
+void MidiProcessor::processMidiMsgsBlock(juce::MidiBuffer& midi_messages)
 {
     p_midi_buffer_.clear();
 
@@ -30,7 +30,7 @@ void MidiProcessor::processMidiMsgsBlock(MidiBuffer& midi_messages)
             if (state_changed_)
             {
                 p_midi_buffer_.addEvent(
-                    MidiMessage::allNotesOff(cur_msg.getChannel()),
+                    juce::MidiMessage::allNotesOff(cur_msg.getChannel()),
                     meta.samplePosition);
                 state_changed_ = false;
             }
@@ -60,7 +60,8 @@ bool MidiProcessor::checkNegHarmPrerequisites(std::atomic<float>* max_note_numbe
     return *is_on && *key < octave_span && available_space > octave_span;
 }
 
-void MidiProcessor::parameterChanged(const String& parameter_id, float new_value)
+void MidiProcessor::parameterChanged(const juce::String& parameter_id,
+                                     float new_value)
 {
     DBG("parameterChanged Event: - parameter_id: " << parameter_id
                                                    << "new_value: " << new_value);
@@ -71,7 +72,7 @@ int MidiProcessor::getNegHarmNn(int nn, int inKeyOf)
 {
     DBG("getNegHarmNn called, nn: "
         << nn << " inKeyOf: " << inKeyOf
-        << " NoteName: " << MidiMessage::getMidiNoteName(nn, false, true, 4));
+        << " NoteName: " << juce::MidiMessage::getMidiNoteName(nn, false, true, 4));
 
     auto mirrorNn = negHarmMirAxisNn(nn, inKeyOf);
     auto negHarmPos = 2 * mirrorNn - nn;
