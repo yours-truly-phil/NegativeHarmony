@@ -3,6 +3,7 @@ cmake_minimum_required(VERSION 3.16)
 project(NegativeHarmony VERSION 0.0.1)
 
 set (BaseTargetName NegativeHarmony)
+set (TestTargetName NegativeHarmony_tests)
 
 set(CMAKE_CXX_STANDARD 17)
 
@@ -49,8 +50,12 @@ target_link_libraries(${BaseTargetName} PRIVATE
         juce::juce_recommended_lto_flags
         juce::juce_recommended_warning_flags)
 
+
 # Now simply link against gtest or gtest_main as needed. Eg
-add_executable(${BaseTargetName}.test Test/NegativeHarmonyTest.cpp)
-target_link_libraries(${BaseTargetName}.test ${BaseTargetName})
-target_link_libraries(${BaseTargetName}.test gtest gtest_main)
-add_test(NAME ${BaseTargetName}_test COMMAND ${BaseTargetName}.test)
+add_executable(${TestTargetName} Test/NegativeHarmonyTest.cpp)
+
+juce_generate_juce_header(${TestTargetName})
+
+target_link_libraries(${TestTargetName} ${BaseTargetName})
+target_link_libraries(${TestTargetName} gtest gtest_main)
+#add_test(NAME ${BaseTargetName}_test COMMAND ${TestTargetName})
