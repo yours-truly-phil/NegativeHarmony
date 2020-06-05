@@ -84,12 +84,12 @@ int MidiProcessor::getNegHarmNn(int nn, int inKeyOf)
     {
         negHarmPos -= kOctaveSpan;
     }
-    return negHarmPos;
+    return static_cast<int>(negHarmPos);
 }
 
 float MidiProcessor::negHarmMirAxisNn(int nn, int inKeyOf)
 {
     auto mirrorNo = std::floor((nn + 2 - inKeyOf) / kOctaveSpan);
-    auto mirrorNn = mirrorNo * kOctaveSpan + 3.5 + inKeyOf;
+    auto mirrorNn = mirrorNo * kOctaveSpan + 3.5f + inKeyOf;
     return mirrorNn;
 }

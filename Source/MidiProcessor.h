@@ -35,7 +35,6 @@ public:
     int getNegHarmNn(int nn, int inKeyOf);
 
 private:
-
     void parameterChanged(const String& parameter_id, float new_value) override;
 
     float negHarmMirAxisNn(int nn, int inKeyOf);
