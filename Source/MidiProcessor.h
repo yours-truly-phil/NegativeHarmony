@@ -22,20 +22,21 @@
 */
 #pragma once
 
-#include <JuceHeader.h>
+#include <juce_audio_processors/juce_audio_processors.h>
 
-class MidiProcessor final : AudioProcessorValueTreeState::Listener
+class MidiProcessor final : juce::AudioProcessorValueTreeState::Listener
 {
 public:
-    explicit MidiProcessor(AudioProcessorValueTreeState& vts);
+    explicit MidiProcessor(juce::AudioProcessorValueTreeState& vts);
     ~MidiProcessor() override;
 
-    void processMidiMsgsBlock(MidiBuffer& midi_messages);
+    void processMidiMsgsBlock(juce::MidiBuffer& midi_messages);
 
     int getNegHarmNn(int nn, int inKeyOf);
 
 private:
-    void parameterChanged(const String& parameter_id, float new_value) override;
+    void parameterChanged(const juce::String& parameter_id,
+                          float new_value) override;
 
     float negHarmMirAxisNn(int nn, int inKeyOf);
     bool checkNegHarmPrerequisites(std::atomic<float>* max_note_number,
@@ -44,9 +45,9 @@ private:
                                    std::float_t octave_span,
                                    std::atomic<float>* is_on);
 
-    MidiBuffer p_midi_buffer_;
+    juce::MidiBuffer p_midi_buffer_;
 
-    AudioProcessorValueTreeState& apvts_;
+    juce::AudioProcessorValueTreeState& apvts_;
     std::atomic<float>* is_on_;
     std::atomic<float>* cur_key_;
     std::atomic<float>* min_nn_;

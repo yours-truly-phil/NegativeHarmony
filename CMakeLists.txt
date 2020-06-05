@@ -54,8 +54,6 @@ target_link_libraries(${BaseTargetName} PRIVATE
 # Now simply link against gtest or gtest_main as needed. Eg
 add_executable(${TestTargetName} Test/NegativeHarmonyTest.cpp)
 
-juce_generate_juce_header(${TestTargetName})
-
 target_link_libraries(${TestTargetName} ${BaseTargetName})
 target_link_libraries(${TestTargetName} gtest gtest_main)
-#add_test(NAME ${BaseTargetName}_test COMMAND ${TestTargetName})
+add_test(NAME ${BaseTargetName}_test COMMAND ${TestTargetName})

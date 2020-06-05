@@ -5,20 +5,18 @@
 #include "gtest/gtest.h"
 #include "../Source/MidiProcessor.h"
 
-class MidiProcessorFixture : public ::testing::Test {
- protected:
-  virtual void SetUp() {
-    midi_processor_ = new MidiProcessor();
-  }
-  virtual void TearDown() {
-    delete midi_processor_;
-  }
+class MidiProcessorFixture : public ::testing::Test
+{
+protected:
+    virtual void SetUp() { midi_processor_ = new MidiProcessor(); }
+    virtual void TearDown() { delete midi_processor_; }
 
-  MidiProcessor *midi_processor_;
+    MidiProcessor* midi_processor_;
 };
 
-TEST_F(MidiProcessorFixture, SomeTest) {
-  int negHarmNn = midi_processor_->getNegHarmNn(0, 0);
+TEST_F(MidiProcessorFixture, SomeTest)
+{
+    int negHarmNn = midi_processor_->getNegHarmNn(0, 0);
 
-  EXPECT_EQ(negHarmNn, 7);
+    EXPECT_EQ(negHarmNn, 7);
 }
