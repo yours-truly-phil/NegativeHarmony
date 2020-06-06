@@ -2,7 +2,7 @@
 #include "PluginEditor.h"
 
 NegativeHarmonyEditor::NegativeHarmonyEditor(NegativeHarmonyProcessor& p,
-                                             AudioProcessorValueTreeState& vts)
+                                             juce::AudioProcessorValueTreeState& vts)
     : AudioProcessorEditor(&p)
     , processor_(p)
     , apvts_(vts)
@@ -34,23 +34,24 @@ NegativeHarmonyEditor::~NegativeHarmonyEditor()
     midi_keyboard_state_.removeListener(this);
 }
 
-void NegativeHarmonyEditor::handleNoteOn(MidiKeyboardState* source,
-                                         int midi_channel,
-                                         int midi_note_number,
-                                         float velocity)
+void NegativeHarmonyEditor::handleNoteOn(juce::MidiKeyboardState* /*source*/,
+                                         int /*midi_channel*/,
+                                         int /*midi_note_number*/,
+                                         float /*velocity*/)
 {
 }
 
-void NegativeHarmonyEditor::handleNoteOff(MidiKeyboardState* source,
-                                          int midi_channel,
-                                          int midi_note_number,
-                                          float velocity)
+void NegativeHarmonyEditor::handleNoteOff(juce::MidiKeyboardState* /*source*/,
+                                          int /*midi_channel*/,
+                                          int /*midi_note_number*/,
+                                          float /*velocity*/)
 {
 }
 
-void NegativeHarmonyEditor::paint(Graphics& g)
+void NegativeHarmonyEditor::paint(juce::Graphics& g)
 {
-    g.fillAll(getLookAndFeel().findColour(ResizableWindow::backgroundColourId));
+    g.fillAll(
+        getLookAndFeel().findColour(juce::ResizableWindow::backgroundColourId));
 }
 
 void NegativeHarmonyEditor::resized()
@@ -62,5 +63,5 @@ void NegativeHarmonyEditor::resized()
     tonic_note_no_slider_.setBounds(bounds.removeFromLeft(200));
     choice_box_.setBounds(bounds.removeFromLeft(200));
     plugin_ui_header_.setBounds(bounds.removeFromRight(200));
-    plugin_ui_header_.setJustificationType(Justification::topRight);
+    plugin_ui_header_.setJustificationType(juce::Justification::topRight);
 }

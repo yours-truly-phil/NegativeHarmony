@@ -1,6 +1,11 @@
 //
 // Created by Philipp Seeger on 05/06/2020.
 //
+#pragma once
+
+#define PLUGIN_HEIGHT 300
+#define PLUGIN_WIDTH 800
+
 constexpr float kOctaveSpan {12.0f};
 
 const juce::StringArray kKeySignatures {

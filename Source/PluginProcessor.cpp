@@ -13,20 +13,20 @@ void NegativeHarmonyProcessor::prepareToPlay(double /*sampleRate*/,
 {
 }
 
-void NegativeHarmonyProcessor::processBlock(AudioBuffer<float>& buffer,
-                                            MidiBuffer& midiMessages)
+void NegativeHarmonyProcessor::processBlock(juce::AudioBuffer<float>& buffer,
+                                            juce::MidiBuffer& midiMessages)
 
 {
     midi_processor_.processMidiMsgsBlock(midiMessages);
     buffer.clear();
 }
 
-AudioProcessorEditor* NegativeHarmonyProcessor::createEditor()
+juce::AudioProcessorEditor* NegativeHarmonyProcessor::createEditor()
 {
     return new NegativeHarmonyEditor(*this, apvts_);
 }
 
-void NegativeHarmonyProcessor::getStateInformation(MemoryBlock& dest_data)
+void NegativeHarmonyProcessor::getStateInformation(juce::MemoryBlock& dest_data)
 {
     const auto state = apvts_.copyState();
     const auto xml = state.createXml();
@@ -39,29 +39,29 @@ void NegativeHarmonyProcessor::setStateInformation(const void* data, int sizeInB
 
     if (xmlState != nullptr && xmlState->hasTagName(apvts_.state.getType()))
     {
-        apvts_.replaceState(ValueTree::fromXml(*xmlState));
+        apvts_.replaceState(juce::ValueTree::fromXml(*xmlState));
     }
 }
 
-AudioProcessor* JUCE_CALLTYPE createPluginFilter()
+juce::AudioProcessor* JUCE_CALLTYPE createPluginFilter()
 {
     return new NegativeHarmonyProcessor();
 }
 
-AudioProcessorValueTreeState::ParameterLayout
+juce::AudioProcessorValueTreeState::ParameterLayout
     NegativeHarmonyProcessor::createParameters() const
 {
-    std::vector<std::unique_ptr<RangedAudioParameter>> params;
+    std::vector<std::unique_ptr<juce::RangedAudioParameter>> params;
 
-    params.push_back(std::make_unique<AudioParameterBool>(
+    params.push_back(std::make_unique<juce::AudioParameterBool>(
         kIdIsProcessingActive, "is processing active", false));
 
-    params.push_back(
-        std::make_unique<AudioParameterChoice>(kIdKey, "Key", kKeySignatures, 0));
+    params.push_back(std::make_unique<juce::AudioParameterChoice>(
+        kIdKey, "Key", kKeySignatures, 0));
 
-    params.push_back(std::make_unique<AudioParameterInt>(
+    params.push_back(std::make_unique<juce::AudioParameterInt>(
         kIdMinMidiNoteNumber, "Smallest Midi Note Number", 0, 127, 24));
-    params.push_back(std::make_unique<AudioParameterInt>(
+    params.push_back(std::make_unique<juce::AudioParameterInt>(
         kIdMaxMidiNoteNumber, "Largest Midi Note Number", 0, 127, 127));
 
     return {params.begin(), params.end()};
