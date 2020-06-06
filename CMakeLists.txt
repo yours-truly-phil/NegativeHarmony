@@ -36,7 +36,8 @@ juce_generate_juce_header(${BaseTargetName})
 target_sources(${BaseTargetName} PRIVATE
         Source/PluginProcessor.cpp
         Source/PluginEditor.cpp
-        Source/MidiProcessor.cpp)
+        Source/MidiProcessor.cpp
+        Source/NegativeHarmony.cpp)
 
 target_compile_definitions(${BaseTargetName}
         PUBLIC
@@ -55,8 +56,11 @@ target_link_libraries(${BaseTargetName} PRIVATE
 add_executable(${TestTargetName} Test/NegativeHarmonyTest.cpp)
 
 target_link_libraries(${TestTargetName} PRIVATE
-        ${BaseTargetName})
-target_link_libraries(${TestTargetName} PRIVATE
+        ${BaseTargetName}
+        juce::juce_audio_utils
         gtest
         gtest_main)
+#target_link_libraries(${TestTargetName} PRIVATE
+#        gtest
+#        gtest_main)
 add_test(NAME ${BaseTargetName}_test COMMAND ${TestTargetName})

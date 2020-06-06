@@ -3,20 +3,20 @@
 //
 
 #include "gtest/gtest.h"
-#include "../Source/MidiProcessor.h"
+#include "../Source/NegativeHarmony.h"
 
-class MidiProcessorFixture : public ::testing::Test
+class NegativeHarmonyTest : public ::testing::Test
 {
 protected:
-    virtual void SetUp() { midi_processor_ = new MidiProcessor(); }
-    virtual void TearDown() { delete midi_processor_; }
-
-    MidiProcessor* midi_processor_;
+    NegativeHarmonyTest() {}
+    ~NegativeHarmonyTest() override {}
+    void SetUp() override {}
+    void TearDown() override {}
 };
 
-TEST_F(MidiProcessorFixture, SomeTest)
+TEST_F(NegativeHarmonyTest, Key_of_C)
 {
-    int negHarmNn = midi_processor_->getNegHarmNn(0, 0);
+    int negHarmNn = NegativeHarmony::calculate(0, 0.0f, 0.0f, 127.0f, 12.0f);
 
     EXPECT_EQ(negHarmNn, 7);
 }

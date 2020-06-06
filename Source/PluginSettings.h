@@ -1,7 +1,7 @@
 //
-// Created by phili on 05/06/2020.
+// Created by Philipp Seeger on 05/06/2020.
 //
-constexpr std::float_t kOctaveSpan {12.0f};
+constexpr float kOctaveSpan {12.0f};
 
 const juce::StringArray kKeySignatures {
     "C",
