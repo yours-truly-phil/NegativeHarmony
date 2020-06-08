@@ -43,6 +43,8 @@ void MidiProcessor::processMidiMsgsBlock(juce::MidiBuffer& midi_messages)
                     note_number, *cur_key_, *min_nn_, *max_nn_, kOctaveSpan);
 
                 cur_msg.setNoteNumber(new_nn);
+
+                p_midi_buffer_.addEvent(cur_msg, meta.samplePosition);
             }
         }
     }
