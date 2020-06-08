@@ -49,7 +49,8 @@ bool NegativeHarmony::negHarmCalcChecks(float key,
                                         float octave_span)
 {
     auto available_space = max_nn - min_nn;
-    return key < octave_span && available_space > octave_span;
+    return key >= 0.0f && key < octave_span && octave_span >= 0.0f
+           && available_space > octave_span;
 }
 
 float NegativeHarmony::negHarmMirAxisNn(int nn, float key, float octave_span)
