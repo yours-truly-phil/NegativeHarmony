@@ -6,8 +6,6 @@
 #define PLUGIN_HEIGHT 300
 #define PLUGIN_WIDTH 800
 
-constexpr float kOctaveSpan {12.0f};
-
 const juce::StringArray kKeySignatures {
     "C",
     "Db",

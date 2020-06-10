@@ -1,6 +1,5 @@
 #pragma once
 
-//#include <JuceHeader.h>
 #include "PluginProcessor.h"
 
 typedef juce::AudioProcessorValueTreeState::ButtonAttachment ButtonAttachment;

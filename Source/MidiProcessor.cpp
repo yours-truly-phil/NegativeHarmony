@@ -5,8 +5,6 @@ MidiProcessor::MidiProcessor(juce::AudioProcessorValueTreeState& vts)
 {
     is_on_ = apvts_.getRawParameterValue(kIdIsProcessingActive);
     cur_key_ = apvts_.getRawParameterValue(kIdKey);
-    min_nn_ = apvts_.getRawParameterValue(kIdMinMidiNoteNumber);
-    max_nn_ = apvts_.getRawParameterValue(kIdMaxMidiNoteNumber);
 
     apvts_.addParameterListener(kIdIsProcessingActive, this);
     apvts_.addParameterListener(kIdKey, this);
@@ -33,14 +31,11 @@ void MidiProcessor::processMidiMsgsBlock(juce::MidiBuffer& midi_messages)
                 state_changed_ = false;
             }
 
-            if (*is_on_
-                && NegativeHarmony::negHarmCalcChecks(
-                    *cur_key_, *min_nn_, *max_nn_, kOctaveSpan))
+            if (*is_on_ && NegativeHarmony::negHarmCalcChecks(*cur_key_))
             {
                 auto note_number = cur_msg.getNoteNumber();
 
-                auto new_nn = NegativeHarmony::calculate(
-                    note_number, *cur_key_, *min_nn_, *max_nn_, kOctaveSpan);
+                auto new_nn = NegativeHarmony::calculate(note_number, *cur_key_);
 
                 cur_msg.setNoteNumber(new_nn);
 

@@ -26,36 +26,42 @@ NegativeHarmony::NegativeHarmony()
 {
 }
 
+/*
+ * calculates the negative harmony note number
+ * by selecting the to the given note number closest
+ * axis (between tonic and dominant) that returns a
+ * valid result.
+ */
 int NegativeHarmony::calculate(
-    int nn, float key, float min_nn, float max_nn, float octave_span)
+    int nn, int key, int min_nn, int max_nn, int octave_span)
 {
     auto mirrorNn = negHarmMirAxisNn(nn, key, octave_span);
-    auto negHarmPos = 2 * mirrorNn - nn;
+    auto negHarmPos = static_cast<int>(2.0f * mirrorNn - nn);
 
-    while (min_nn > negHarmPos)
+    while (negHarmPos < min_nn)
     {
         negHarmPos += octave_span;
     }
-    while (max_nn < negHarmPos)
+    while (negHarmPos > max_nn)
     {
         negHarmPos -= octave_span;
     }
-    return static_cast<int>(negHarmPos);
+    return negHarmPos;
 }
 
-bool NegativeHarmony::negHarmCalcChecks(float key,
-                                        float min_nn,
-                                        float max_nn,
-                                        float octave_span)
+bool NegativeHarmony::negHarmCalcChecks(int key,
+                                        int min_nn,
+                                        int max_nn,
+                                        int octave_span)
 {
-    auto available_space = max_nn - min_nn;
-    return key >= 0.0f && key < octave_span && octave_span >= 0.0f
-           && available_space > octave_span;
+    auto available_space = max_nn - min_nn + 1;
+    return key >= 0 && key < octave_span && octave_span >= 0
+           && available_space >= octave_span;
 }
 
-float NegativeHarmony::negHarmMirAxisNn(int nn, float key, float octave_span)
+float NegativeHarmony::negHarmMirAxisNn(int nn, int key, int octave_span)
 {
-    auto mirrorNo = std::floor((nn + 2 - key) / octave_span);
+    auto mirrorNo = std::floor((float) (nn + 2 - key) / octave_span);
     auto mirrorNn = mirrorNo * octave_span + 3.5f + key;
     return mirrorNn;
 }

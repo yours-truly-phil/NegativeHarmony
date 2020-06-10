@@ -57,10 +57,7 @@ add_executable(${TestTargetName} Test/NegativeHarmonyTest.cpp)
 
 target_link_libraries(${TestTargetName} PRIVATE
         ${BaseTargetName}
-        juce::juce_audio_utils
         gtest
         gtest_main)
-#target_link_libraries(${TestTargetName} PRIVATE
-#        gtest
-#        gtest_main)
+
 add_test(NAME ${BaseTargetName}_test COMMAND ${TestTargetName})
