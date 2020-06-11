@@ -18,6 +18,8 @@ void MidiProcessor::processMidiMsgsBlock(juce::MidiBuffer& midi_messages)
 {
     p_midi_buffer_.clear();
 
+    int key;
+
     for (auto meta: midi_messages)
     {
         auto cur_msg = meta.getMessage();
@@ -31,11 +33,12 @@ void MidiProcessor::processMidiMsgsBlock(juce::MidiBuffer& midi_messages)
                 state_changed_ = false;
             }
 
-            if (*is_on_ && NegativeHarmony::negHarmCalcChecks(*cur_key_))
+            if (*is_on_ != 0.0f
+                && NegativeHarmony::negHarmCalcChecks(key = (int)cur_key_->load()))
             {
                 auto note_number = cur_msg.getNoteNumber();
 
-                auto new_nn = NegativeHarmony::calculate(note_number, *cur_key_);
+                auto new_nn = NegativeHarmony::calculate(note_number, key);
 
                 cur_msg.setNoteNumber(new_nn);
 
