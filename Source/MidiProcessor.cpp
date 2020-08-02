@@ -34,7 +34,7 @@ void MidiProcessor::processMidiMsgsBlock(juce::MidiBuffer& midi_messages)
             }
 
             if (*is_on_ != 0.0f
-                && NegativeHarmony::negHarmCalcChecks(key = (int)cur_key_->load()))
+                && NegativeHarmony::negHarmCalcChecks(key = (int) cur_key_->load()))
             {
                 auto note_number = cur_msg.getNoteNumber();
 

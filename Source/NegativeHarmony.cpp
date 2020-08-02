@@ -22,9 +22,7 @@
 #include <cmath>
 #include "NegativeHarmony.h"
 
-NegativeHarmony::NegativeHarmony()
-{
-}
+NegativeHarmony::NegativeHarmony() = default;
 
 /*
  * calculates the negative harmony note number
@@ -35,18 +33,26 @@ NegativeHarmony::NegativeHarmony()
 int NegativeHarmony::calculate(
     int nn, int key, int min_nn, int max_nn, int octave_span)
 {
-    auto mirrorNn = negHarmMirAxisNn(nn, key, octave_span);
-    auto negHarmPos = static_cast<int>(2.0f * mirrorNn - nn);
+    int mirrorNn = negHarmMirAxisNn(nn, key, octave_span);
+    int negHarmPos = static_cast<int>(2.0f * (float) mirrorNn - (float) nn);
 
-    while (negHarmPos < min_nn)
+    return intoRange(negHarmPos, min_nn, max_nn, octave_span);
+}
+
+int NegativeHarmony::intoRange(int note_number,
+                               int min_nn,
+                               int max_nn,
+                               int octave_span)
+{
+    while (note_number < min_nn)
     {
-        negHarmPos += octave_span;
+        note_number += octave_span;
     }
-    while (negHarmPos > max_nn)
+    while (note_number > max_nn)
     {
-        negHarmPos -= octave_span;
+        note_number -= octave_span;
     }
-    return negHarmPos;
+    return note_number;
 }
 
 bool NegativeHarmony::negHarmCalcChecks(int key,
@@ -59,9 +65,9 @@ bool NegativeHarmony::negHarmCalcChecks(int key,
            && available_space >= octave_span;
 }
 
-float NegativeHarmony::negHarmMirAxisNn(int nn, int key, int octave_span)
+int NegativeHarmony::negHarmMirAxisNn(int nn, int key, int octave_span)
 {
-    auto mirrorNo = std::floor((float) (nn + 2 - key) / octave_span);
-    auto mirrorNn = mirrorNo * octave_span + 3.5f + key;
-    return mirrorNn;
+    auto mirrorNo = std::floor((float) (nn + 2 - key) / (float) octave_span);
+    auto mirrorNn = mirrorNo * (float) octave_span + 3.5f + (float) key;
+    return static_cast<int>(mirrorNn);
 }

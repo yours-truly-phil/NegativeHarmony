@@ -40,5 +40,5 @@ private:
 
     MidiProcessor midi_processor_ {apvts_};
 
-    juce::AudioProcessorValueTreeState::ParameterLayout createParameters() const;
+    static juce::AudioProcessorValueTreeState::ParameterLayout createParameters() ;
 };

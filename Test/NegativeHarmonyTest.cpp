@@ -8,8 +8,8 @@
 class NegativeHarmonyTest : public ::testing::Test
 {
 protected:
-    NegativeHarmonyTest() {}
-    ~NegativeHarmonyTest() override {}
+    NegativeHarmonyTest() = default;
+    ~NegativeHarmonyTest() override = default;
     void SetUp() override {}
     void TearDown() override {}
 };

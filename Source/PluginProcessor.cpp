@@ -49,7 +49,7 @@ juce::AudioProcessor* JUCE_CALLTYPE createPluginFilter()
 }
 
 juce::AudioProcessorValueTreeState::ParameterLayout
-    NegativeHarmonyProcessor::createParameters() const
+    NegativeHarmonyProcessor::createParameters()
 {
     std::vector<std::unique_ptr<juce::RangedAudioParameter>> params;
 
