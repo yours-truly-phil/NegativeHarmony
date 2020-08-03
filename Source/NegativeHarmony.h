@@ -36,13 +36,7 @@ public:
                                   int octave_span = DEF_OCTAVE);
 
 private:
-    static int negHarmMirAxisNn(int nn, int key, int octave_span = DEF_OCTAVE);
-
-    static int intoRange(int note_number,
-                         int min_nn = DEF_MIN_NN,
-                         int max_nn = DEF_MAX_NN,
-                         int octave_span = DEF_OCTAVE);
-
+    static float negHarmMirAxisNn(int nn, int key, int octave_span = DEF_OCTAVE);
     NegativeHarmony();
 
     static constexpr int DEF_OCTAVE = 12;
